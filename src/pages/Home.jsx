@@ -1,6 +1,8 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";   
+import TaskForm from "../components/TaskForm.jsx"; // Import the TaskForm component
 
 export default function Home() {
     
@@ -54,10 +56,13 @@ export default function Home() {
     },
   };
 
- 
-  const handleAddTask = () => {
-    alert("Ajouter une tâche cliqué !");
-  };
+
+  //pour afficher le formulaire modal 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
 
   return (
     <div style={containerStyle}>
@@ -86,9 +91,11 @@ export default function Home() {
         viewport={{ once: true, amount: 0.8 }}
         variants={cardVariants}
       >
-        <button style={buttonStyle} onClick={handleAddTask}>
+        <motion.button style={buttonStyle} 
+          onClick={openModal}
+        >
           Ajouter une tache
-        </button>
+        </motion.button>
         <button style={buttonStyle}>Voir les taches</button>
         <button style={buttonStyle}>Voir la liste des taches</button>
         <div style={{ marginTop: 10 }}>
@@ -97,6 +104,27 @@ export default function Home() {
           </Link>
         </div>
       </motion.div>
+       {/* Modal for adding a task */}
+        <AnimatePresence>
+          {isModalOpen && (
+             <motion.div
+            className="modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="modal-container"
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.7, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 200, damping: 20 }}
+            >
+              <TaskForm onClose={closeModal} />
+            </motion.div>
+          </motion.div>
+          )}
+        </AnimatePresence>
     </div>
   );
 }

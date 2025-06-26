@@ -1,8 +1,9 @@
-import React from "react";
+import React from "react";   
 
-function TaskForm() {
+function TaskForm({ onClose }) {
     return(
-        <div className="Form">
+        <div className="modal-content">
+            <button className="close-btn" onClick={onClose}>×</button>
             <fieldset>
                 <legend>
                     Formulaire
