@@ -14,6 +14,8 @@ function Signip(){
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password" name="password" required />
                 <br />
+
+                <button type="submit">Sign Up</button>
             </form>
         </fieldset>
     </div>
