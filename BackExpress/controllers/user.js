@@ -34,6 +34,40 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-
+    User.findOne({
+        email: req.body.email
+    })
+    .then(async (user) => {
+           if (user === null) {
+                return res.status(401).json({
+                    message: "Paire identifiant/mot de passe incorrect"
+                })
+           }else {
+                bcrypt.compare(req.body.passsword, user.password)
+                .then(valid => {
+                    if (!valid){
+                        return res.status(401).json({
+                            message: "Paire identifiant/mot de passe incorrect"
+                        })
+                    }else{
+                        return res.status(200).json({
+                            userId: user._id,
+                            token: jwt.sign(
+                                {
+                                    userId: user._id
+                                },
+                                'RANDOM_TOKEN_SECRET',
+                                {
+                                    expiressIn: '24h'
+                                }
+                            )
+                        });
+                    }
+                })
+                .catch(error => res.status(500).json({error}));
+           }
+        
+    })
+    .catch(error => res.status(500).json({error}));
 }
 
