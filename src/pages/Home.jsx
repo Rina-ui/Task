@@ -103,6 +103,11 @@ export default function Home() {
             Theme
           </Link>
         </div>
+        <div style={{ marginTop: 10 }}>
+          <Link to="/login" style={{ color: "#00BFFF" }}>
+            Se connecter
+          </Link>
+        </div>
       </motion.div>
        {/* Modal for adding a task */}
         <AnimatePresence>

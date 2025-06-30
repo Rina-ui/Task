@@ -7,7 +7,6 @@ const app = express();
 
 //Database connection
 mongoose.connect('mongodb+srv://m40282897:ma-gra12@cluster0.7q1vrxe.mongodb.net/nom_de_ta_base?retryWrites=true&w=majority&appName=Cluster0', {
-    useNewUrlPaser: true,
     useUnifiedTopology: true
 })
 .then(() => console.log('Connected to MongoDB'))
