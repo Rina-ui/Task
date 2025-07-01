@@ -5,6 +5,9 @@ import { Navigate } from "react-router-dom";
 import TaskForm from "../components/TaskForm.jsx"; // Import the TaskForm component
 
 export default function Home() {
+
+  const location = useLocation();
+  const userEmail = location.state?.userEmail || "invité";
     
   const containerStyle = {
     position: "relative",
@@ -65,7 +68,8 @@ export default function Home() {
 
 
   return (
-    <div style={containerStyle}>
+    <div style={containerStyle}> 
+      <h1>Bienvenue, {userEmail} </h1>
       <div style={splashStyle} />
       <motion.h1
         initial="offscreen"

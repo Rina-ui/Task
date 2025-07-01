@@ -14,6 +14,7 @@ function App() {
                 <Route path="/theme" element={<Theme />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signip" element={<Signip />} />
+                <Route path="/home" element={<Home />} />
             </Routes>
         </Router>
     );

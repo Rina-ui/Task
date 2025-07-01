@@ -10,15 +10,27 @@ function Signip() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/signup", {
+      const response = await axios.post("http://localhost:3000/api/user/signup", {
         email,
         password,
       });
       console.log(response.data);
-      alert("Signup successful!");
+      
+      alert('Bienvenue, ${email}! Votre compte a été créé avec succès.');
+
+      //redicrection to home page
+      navigate('/home', {state: {userEmail: email}})
+
     } catch (error) {
       console.error("Error during signup:", error);
-      alert("An error occurred during signup. Please try again.");
+
+      //si l'user est deja cree 
+        if (error.response && error.response.status === 400) {
+            alert("Cet email est déjà utilisé. Veuillez en choisir un autre.");
+            navigate('/login');
+        } else {
+            alert("Une erreur s'est produite lors de la création de votre compte. Veuillez réessayer.");
+        }
     }
   };
 
@@ -114,7 +126,7 @@ function Signip() {
 
           <p style={{ marginTop: "16px", textAlign: "center", color: "#000" }}>
             Already have an account?{" "}
-            <Link to="/login" style={{ color: "#000", fontWeight: "bold", textDecoration: "underline" }}>
+            <Link to="/login" style={{ color: "#fff", fontWeight: "bold", textDecoration: "underline" }}>
               Login
             </Link>
           </p>
