@@ -4,6 +4,31 @@ import { motion } from "framer-motion";
 
 
 function Login() {
+
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:3000/api/user/login", {
+        email,
+        password,
+      });
+      console.log(response.data);
+      
+      alert('Bienvenue, ${email}! .');
+
+      //redicrection to home page
+      navigate('/home', {state: {userEmail: email}})
+
+    } catch (error) {
+      console.error("Error during login:", error);
+
+      //si l'user est deja cree 
+        alert("Une erreur s'est produite lors de la connexion a votre compte. Veuillez réessayer.");
+        
+    }
+  };
+
+
   return (
     <div
       style={{
