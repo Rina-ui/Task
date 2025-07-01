@@ -1,13 +1,26 @@
-import React from "react";
+import React , {useNavigate, useLocation,  useEffect} from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
-import { Navigate } from "react-router-dom";   
+import { Link } from "react-router-dom";   
 import TaskForm from "../components/TaskForm.jsx"; // Import the TaskForm component
 
 export default function Home() {
 
   const location = useLocation();
+  const navigate = useNavigate();
+
   const userEmail = location.state?.userEmail || "invité";
+
+  useEffect(() => {
+    const email = localStorage.getItem("userEmail");
+
+    if (!email) {
+      // utilisateur non connecté ➝ redirige
+      navigate("/login");
+    } else {
+      setUserEmail(email);
+    }
+  }, [navigate]);
+
     
   const containerStyle = {
     position: "relative",
@@ -70,6 +83,23 @@ export default function Home() {
   return (
     <div style={containerStyle}> 
       <h1>Bienvenue, {userEmail} </h1>
+      <button
+        onClick={() => {
+          localStorage.removeItem("userEmail"); // déconnexion
+          navigate("/login");
+        }}
+        style={{
+          marginTop: "20px",
+          padding: "10px 20px",
+          backgroundColor: "#e74c3c",
+          color: "#fff",
+          border: "none",
+          borderRadius: "8px",
+          cursor: "pointer",
+        }}
+      >
+        Se déconnecter
+      </button>
       <div style={splashStyle} />
       <motion.h1
         initial="offscreen"

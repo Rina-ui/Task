@@ -1,70 +1,59 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
+import axios from "axios";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/api/user/login", {
         email,
         password,
       });
+
       console.log(response.data);
-      
-      alert('Bienvenue, ${email}! .');
+      alert(`Bienvenue, ${email} !`);
 
-      //redicrection to home page
-      navigate('/home', {state: {userEmail: email}})
-
+      // redirection vers la page d'accueil
+      navigate("/home", { state: { userEmail: email } });
     } catch (error) {
       console.error("Error during login:", error);
-
-      //si l'user est deja cree 
-        alert("Une erreur s'est produite lors de la connexion a votre compte. Veuillez réessayer.");
-        
+      alert("Une erreur s'est produite lors de la connexion. Veuillez réessayer.");
     }
   };
 
-
   return (
-    <div
-      style={{
-        height: "100vh",
-        background: "linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily: "Segoe UI, sans-serif",
-      }}
-    >
+    <div style={{ height: "100vh", background: "linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Segoe UI, sans-serif" }}>
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         style={{
-          backdropFilter: "blur(10px)", // flou derrière
-          backgroundColor: "rgba(255, 255, 255, 0.2)", // transparence
+          backdropFilter: "blur(10px)",
+          backgroundColor: "rgba(255, 255, 255, 0.2)",
           padding: "32px",
           borderRadius: "16px",
-          border: "1px solid rgba(255, 255, 255, 0.3)", // bord léger
+          border: "1px solid rgba(255, 255, 255, 0.3)",
           boxShadow: "0 8px 20px rgba(0, 0, 0, 0.1)",
           width: "350px",
           maxWidth: "90%",
         }}
       >
         <h2 style={{ textAlign: "center", color: "#fff", marginBottom: "24px" }}>Login</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: "16px" }}>
-            <label htmlFor="email" style={{ fontWeight: 500, color: "#fff" }}>
-              Email
-            </label>
+            <label htmlFor="email" style={{ fontWeight: 500, color: "#fff" }}>Email</label>
             <input
               type="email"
               id="email"
               name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               style={{
                 width: "100%",
@@ -78,13 +67,13 @@ function Login() {
           </div>
 
           <div style={{ marginBottom: "24px" }}>
-            <label htmlFor="password" style={{ fontWeight: 500, color: "#fff" }}>
-              Password
-            </label>
+            <label htmlFor="password" style={{ fontWeight: 500, color: "#fff" }}>Password</label>
             <input
               type="password"
               id="password"
               name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
               style={{
                 width: "100%",
