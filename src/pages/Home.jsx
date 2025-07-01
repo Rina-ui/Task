@@ -1,26 +1,37 @@
-import React , {useNavigate, useLocation,  useEffect} from "react";
+import React , {useState,  useEffect} from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";   
 import TaskForm from "../components/TaskForm.jsx"; // Import the TaskForm component
 
 export default function Home() {
-
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const userEmail = location.state?.userEmail || "invité";
+  // État pour stocker l'email de l'utilisateur connecté
+  const [userEmail, setUserEmail] = useState("invité");
+  const [checkingAuth, setCheckingAuth] = useState(true); // Pour éviter l'affichage trop tôt
+  //pour afficher le formulaire modal 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
+  // Vérifie si l'utilisateur est connecté
   useEffect(() => {
-    const email = localStorage.getItem("userEmail");
+    const email = localStorage.getItem("userEmail") || location.state?.userEmail;
 
     if (!email) {
-      // utilisateur non connecté ➝ redirige
       navigate("/login");
     } else {
       setUserEmail(email);
+      setCheckingAuth(false); 
     }
-  }, [navigate]);
+  }, [navigate, location.state]);
 
+  // Affichage d’un message pendant la vérification de l'authentification
+  if (checkingAuth) {
+    return <div style={{ padding: 20 }}>Chargement...</div>;
+  }
     
   const containerStyle = {
     position: "relative",
@@ -73,13 +84,6 @@ export default function Home() {
   };
 
 
-  //pour afficher le formulaire modal 
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
-
   return (
     <div style={containerStyle}> 
       <h1>Bienvenue, {userEmail} </h1>
@@ -119,12 +123,12 @@ export default function Home() {
         This is a simple task management application.
       </motion.p>
 
-      <motion.div
+      {/* <motion.div
         initial="offscreen"
         whileInView="onscreen"
         viewport={{ once: true, amount: 0.8 }}
         variants={cardVariants}
-      >
+      > */}
         <motion.button style={buttonStyle} 
           onClick={openModal}
         >
@@ -142,7 +146,7 @@ export default function Home() {
             Se connecter
           </Link>
         </div>
-      </motion.div>
+      {/* </motion.div> */}
        {/* Modal for adding a task */}
         <AnimatePresence>
           {isModalOpen && (
