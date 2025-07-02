@@ -111,7 +111,7 @@ export default function Home() {
         viewport={{ once: true, amount: 0.8 }}
         variants={cardVariants}
       >
-        Welcome to the Task Manager
+        TASK MANAGER
       </motion.h1>
 
       <motion.p
@@ -120,7 +120,7 @@ export default function Home() {
         transition={{ duration: 1, delay: 0.4 }}
         viewport={{ once: true }}
       >
-        This is a simple task management application.
+       C'est un gestionnaire de taches simple pour vous aider à organiser vos taches quotidiennes.
       </motion.p>
 
       {/* <motion.div
