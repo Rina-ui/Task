@@ -1,7 +1,42 @@
 import React from "react";   
 import { motion } from "framer-motion";
+import { useState } from "react";
 
-function TaskForm({ onClose }) {
+function TaskForm({ onClose }) {  
+const [description, setDescription] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try{
+      const response = fetch("http://localhost:3000/api/task", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`, // Assurez-vous que le token est stocké dans le localStorage
+        },
+
+        body: JSON.stringify({
+          description: description.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la création de la tâche.");
+      };
+
+      const data = await response.json();
+      console.log(data);
+      alert("Tâche ajoutée avec succès !");
+      setDescription(""); 
+      onClose(); 
+    }catch (error) {
+      console.error("Erreur lors de la création de la tâche :", error);
+      alert("Une erreur s'est produite lors de l'ajout de la tâche. Veuillez réessayer.");
+    }
+  }
+
+
 return (
     <motion.fieldset
       initial={{ opacity: 0, scale: 0.95 }}
@@ -31,6 +66,7 @@ return (
         rows="4"
         cols="35"
         placeholder="Entrez votre tâche ici..."
+        onChange={(e) => setDescription(e.target.value)}
         style={styles.textarea}
         whileFocus={{ borderColor: "#7F00FF" }}
       />
@@ -41,6 +77,7 @@ return (
           style={styles.button}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={handleSubmit}
         >
           Ajouter
         </motion.button>
